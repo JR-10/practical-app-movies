@@ -1,0 +1,31 @@
+<div class="container">
+    <h3>Listado de peliculas</h3>
+    <div class="mx-aunto flex-row d-flex justify-content-center mt-3 contain">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!-- <th scope="col">id</th> -->
+                    <th scope="col">titulo</th>
+                    <th scope="col">idioma</th>
+                    <th scope="col">overview</th>
+                    <th scope="col">poster_path</th>
+                    <th scope="col">fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (movie of dataMovies; track movie.id; let i = $index) {
+                    <tr>
+                        <td>{{ movie.original_title }} </td>
+                        <td>{{ movie.original_language }} </td>
+                        <td>{{ movie.overview  }}</td>
+                        <td>{{ movie.poster_path  }}</td>
+                        <td>{{ movie.release_date  }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+

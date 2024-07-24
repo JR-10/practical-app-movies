@@ -17,7 +17,7 @@ export class GetMovieUseCases {
     return this._movieGateWay.getMovieAll();
   }
 
-  getMovieFilter(filters: RequestMovieModel): Observable<ResponseMovieModel> {
+  getMovieFilter(filters: RequestMovieModel): Observable<DataEndPoint<Array<ResponseMovieModel>>> {
     return this._movieGateWay.getMovieFilter(filters);
   }
 

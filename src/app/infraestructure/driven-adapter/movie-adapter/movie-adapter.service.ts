@@ -25,12 +25,11 @@ export class MovieAdapterService extends MovieGateway {
     return this.http.get<DataEndPoint<Array<ResponseMovieModel>>>(url);
   }
 
-  getMovieFilter(filters: RequestMovieModel): Observable<ResponseMovieModel> {
+  getMovieFilter(filters: RequestMovieModel): Observable<DataEndPoint<Array<ResponseMovieModel>>> {
     let queryParams = new HttpParams();
-    queryParams = queryParams.append("documentType", String(filters.filter1));
-    queryParams = queryParams.append("documentNumber", String(filters.filter2));
-    const url = `${this._url}/person-filter`;
-    return this.http.get<ResponseMovieModel>(url, { params: queryParams });
+    queryParams = queryParams.append("page", String(filters.page));
+    const url = `${this._url}`;
+    return this.http.get<DataEndPoint<Array<ResponseMovieModel>>>(url, { params: queryParams });
   }
 
 }

@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { GetMovieUseCases } from '../../../domain/usecase/get-movie-usecase';
 import { ResponseMovieModel } from '../../../domain/models/movie/movie.model';
 import { HelpersService } from '../../shared/helpers/helpers.service';
 import { DataEndPoint } from '../../../domain/models/general.models';
+import { FormsModule } from '@angular/forms';
+import { FilterPipeModule } from 'ngx-filter-pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule, FilterPipeModule, NgxPaginationModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss'
 })
@@ -18,34 +21,43 @@ import { DataEndPoint } from '../../../domain/models/general.models';
 export class TableComponent implements OnInit {
 
   dataMovies: Array<ResponseMovieModel> = [];
+  totalItems!: number;
+  itemsPerPage!: number;
+  currentPage: number = 1;
+
+  movieFilter: any = { original_title: '' };
+
 
   constructor(
-    private router: Router,
     private _getMovieUseCase: GetMovieUseCases,
     private  helpers: HelpersService,
   ) {
-    this.getAllPersons();
+    this.getMovies(this.currentPage);
   }
 
   ngOnInit(): void {}
 
-  getAllPersons(): void {
-    this._getMovieUseCase.getMovieAll()?.subscribe({
+  getMovies(currentPage: number): void {
+    this._getMovieUseCase.getMovieFilter({page:currentPage})?.subscribe({
       next: (resp: DataEndPoint<Array<ResponseMovieModel>>) => {
-        console.log('valor de la respuesta: ', resp);
         this.dataMovies = resp.results;
+        this.currentPage = resp.page;
+        this.itemsPerPage = resp.results.length;
+        this.totalItems = resp.total_results;
       },
       error: (_error: HttpErrorResponse) => {
-        if (_error.status === 404){
-          this.helpers.toast({ icon: 'warning', text: _error.error.message });
-        } else {
-          this.helpers.toast({ icon: 'error', text: _error.error.message });
-        }
+        this.helpers.toast({ icon: 'error', text: 'Error de servidor' });
       },
     });
   }
 
-  onSearch(){
-    this.router.navigate(['/search']);
+  onPageChange(numberPage: number) {
+    this.currentPage = numberPage;
+    this.getMovies(numberPage)
   }
+
+  onPageBoundsCorrection(numberPage: number) {
+    this.currentPage = numberPage;
+  }
+
 }

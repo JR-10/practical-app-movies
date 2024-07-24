@@ -9,6 +9,5 @@ export interface ResponseMovieModel {
 
 
 export interface RequestMovieModel {
-  filter1?: string;
-  filter2?: string;
+  page?: number;
 }

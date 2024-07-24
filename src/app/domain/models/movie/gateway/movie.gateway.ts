@@ -6,5 +6,5 @@ export abstract class MovieGateway {
 
   abstract getMovieAll(): Observable<DataEndPoint<Array<ResponseMovieModel>>>;
 
-  abstract getMovieFilter(filters: RequestMovieModel ): Observable<ResponseMovieModel>;
+  abstract getMovieFilter(filters: RequestMovieModel ): Observable<DataEndPoint<Array<ResponseMovieModel>>>;
 }
